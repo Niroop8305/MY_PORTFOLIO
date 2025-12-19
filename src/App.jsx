@@ -95,6 +95,7 @@ const PROFILE = {
   headline: "Full-Stack Developer",
   tagline:
     "Full-stack developer with strong problem-solving and hackathon experience — I build scalable web applications with clean architecture and solid engineering practices.",
+  photo: "/images/profile-photo.jpeg",
   resumeUrl: "/resume.pdf",
   availability: {
     status: "available",
@@ -112,6 +113,8 @@ const PROFILE = {
     email: "nirooppapani8305@gmail.com",
     github: "https://github.com/Niroop8305",
     linkedin: "https://www.linkedin.com/in/niroop-papani-9864672b5/",
+    leetcode: "https://leetcode.com/u/LaxmiNiroop/",
+    hackerrank: "https://www.hackerrank.com/profile/nirooppapani8305",
   },
 };
 
@@ -273,8 +276,8 @@ const PROJECTS = {
         "Real-time data streaming and WebSocket implementation",
         "User experience design for 3D interfaces",
       ],
-      github: "https://github.com/yourusername/neovision",
-      demo: "https://neovision-demo.vercel.app",
+      github: "https://github.com/Niroop8305/neovision",
+      demo: "#",
       images: [
         "/projects/neovision-1.jpg",
         "/projects/neovision-2.jpg",
@@ -311,8 +314,8 @@ const PROJECTS = {
         "Security best practices for authentication and authorization",
         "Transaction management and ACID compliance in MySQL",
       ],
-      github: "https://github.com/yourusername/hr-management",
-      demo: "https://hr-system-demo.vercel.app",
+      github: "https://github.com/Niroop8305/hr-management",
+      demo: "#",
       images: [
         "/projects/hr-1.jpg",
         "/projects/hr-2.jpg",
@@ -348,41 +351,51 @@ const PROJECTS = {
         "Product thinking and user flow design",
         "MongoDB aggregation for complex queries",
       ],
-      github: "https://github.com/yourusername/innovatefund",
-      demo: "https://innovatefund-demo.vercel.app",
+      github: "https://github.com/Niroop8305/innovatefund",
+      demo: "#",
       images: ["/projects/innovatefund-1.jpg", "/projects/innovatefund-2.jpg"],
       date: "September 2024",
       team: "Team of 3",
     },
     {
-      title: "Walmart Sparkathon Project",
-      subtitle: "ML-based price prediction web app",
-      tech: ["Web UI", "Model integration"],
+      title: "Walmart Sparkathon 2025",
+      subtitle: "AI-Powered Retail Analytics Platform",
+      tech: ["React", "Node.js", "MongoDB", "JWT", "ML", "Recharts"],
       bullets: [
-        "Built the frontend and integrated predictions from an ML model.",
-        "Delivered a hackathon-ready experience under time constraints.",
+        "Built AI-powered platform for inventory, pricing, and marketing optimization.",
+        "Achieved 95% prediction accuracy in product demand forecasting.",
+        "Implemented dynamic pricing reducing costs by 30% and waste by 25%.",
       ],
       problem:
-        "Retailers need dynamic pricing strategies based on market trends and competitor analysis.",
+        "Retailers face inventory mismanagement, suboptimal pricing strategies, ineffective marketing, and waste generation from unsold products.",
       solution:
-        "A web interface for ML-powered price prediction, helping retailers optimize pricing decisions.",
+        "An integrated AI platform combining predictive analytics, dynamic pricing, and marketing insights to drive profitability and reduce waste.",
       fullDescription:
-        "A hackathon project for Walmart that integrates machine learning models for price prediction. The frontend provides an intuitive dashboard for viewing predictions, historical trends, and competitor pricing data. Built with a focus on data visualization and real-time updates.",
+        "AI-Powered Retail Analytics Platform revolutionizing how Walmart manages operations through machine learning and real-time data analysis. Features include smart product trend analysis with 95% accuracy, dynamic pricing optimization reducing costs by 30%, AI-driven marketing insights improving ROI by 40%, and waste reduction strategies cutting waste by 25%. Built with React, Node.js, MongoDB, and custom ML algorithms.",
       challenges: [
-        "Integrating a Python-based ML model with web frontend",
-        "Designing effective data visualizations for pricing trends",
-        "Optimizing API calls for real-time predictions",
+        "Building predictive ML models with 95% accuracy for demand forecasting",
+        "Implementing real-time data analysis for thousands of products",
+        "Creating intuitive dashboards for complex business metrics",
+        "Integrating authentication, pricing algorithms, and marketing automation",
       ],
       learnings: [
-        "Full-stack integration with ML models",
-        "Data visualization best practices",
-        "Working with external APIs and rate limiting",
+        "Machine learning integration with MERN stack applications",
+        "Advanced data visualization with Recharts and Framer Motion",
+        "Secure authentication and role-based access control",
+        "Business impact measurement and KPI tracking",
       ],
-      github: "https://github.com/yourusername/walmart-sparkathon",
-      demo: "https://sparkathon-demo.vercel.app",
-      images: ["/projects/walmart-1.jpg", "/projects/walmart-2.jpg"],
-      date: "July 2024",
-      team: "Team of 4",
+      impact:
+        "30% cost reduction, 40% marketing ROI improvement, 25% waste reduction",
+      github: "https://github.com/Niroop8305/Sparkathon-2025---website",
+      demo: "https://sparkathon-website.vercel.app/auth",
+      images: [
+        "/images/Sparkathon-1.png",
+        "/images/Sparkathon-2.png",
+        "/images/Sparkathon-3.png",
+        "/images/Sparkathon-4.png",
+      ],
+      date: "January 2025",
+      team: "Solo Project",
     },
   ],
 };
@@ -497,10 +510,12 @@ const NAV_ITEMS = [
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
   { id: "achievements", label: "Achievements" },
+  { id: "testimonials", label: "Testimonials" },
   { id: "contact", label: "Contact" },
 ];
 
 function MonogramMark({ name }) {
+  const [imageError, setImageError] = useState(false);
   const initials = name
     .split(" ")
     .filter(Boolean)
@@ -509,12 +524,31 @@ function MonogramMark({ name }) {
     .join("");
 
   return (
-    <div className="relative grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/5 text-sm font-semibold text-slate-50">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-xl bg-linear-to-br from-cyan-400/20 via-fuchsia-400/20 to-emerald-400/20 opacity-70"
-      />
-      <span className="relative">{initials || "LN"}</span>
+    <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-white/10 bg-white/5">
+      {!imageError && PROFILE.photo ? (
+        <>
+          <img
+            src={PROFILE.photo}
+            alt={name}
+            className="h-full w-full object-cover"
+            onError={() => setImageError(true)}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-xl bg-linear-to-br from-cyan-400/20 via-fuchsia-400/20 to-emerald-400/20 opacity-30"
+          />
+        </>
+      ) : (
+        <>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-xl bg-linear-to-br from-cyan-400/20 via-fuchsia-400/20 to-emerald-400/20 opacity-70"
+          />
+          <div className="relative grid h-full w-full place-items-center text-sm font-semibold text-slate-50">
+            <span>{initials || "LN"}</span>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -624,8 +658,20 @@ function SkillBadge({ skill, color }) {
   };
 
   const levelMap = {
-    expert: { dots: 3, color: "bg-emerald-400", label: "Expert" },
-    intermediate: { dots: 2, color: "bg-cyan-400", label: "Intermediate" },
+    expert: {
+      dots: 3,
+      color: "bg-emerald-400",
+      label: "Expert",
+      percentage: 90,
+      barColor: "bg-emerald-400",
+    },
+    intermediate: {
+      dots: 2,
+      color: "bg-cyan-400",
+      label: "Intermediate",
+      percentage: 75,
+      barColor: "bg-cyan-400",
+    },
   };
 
   const level = levelMap[skill.level];
@@ -654,13 +700,26 @@ function SkillBadge({ skill, color }) {
               />
             ))}
           </div>
+          <span className="text-xs font-medium text-slate-400">
+            {level.percentage}%
+          </span>
         </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="w-full mt-2 h-1 bg-slate-700/50 rounded-full overflow-hidden">
+        <div
+          className={`h-full ${level.barColor} transition-all duration-500 ease-out`}
+          style={{
+            width: isExpanded ? `${level.percentage}%` : "0%",
+          }}
+        />
       </div>
 
       {/* Expandable description */}
       <div
         className={`overflow-hidden transition-all duration-300 ${
-          isExpanded ? "max-h-20 opacity-100 mt-2" : "max-h-0 opacity-0"
+          isExpanded ? "max-h-24 opacity-100 mt-2" : "max-h-0 opacity-0"
         }`}
       >
         <div className="text-xs text-slate-400 leading-relaxed border-t border-white/10 pt-2">
@@ -887,30 +946,32 @@ function ProjectModal({ project, onClose, onNext, onPrev }) {
             ))}
           </div>
 
-          {/* Image Gallery Placeholder */}
+          {/* Image Gallery */}
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             {project.images?.map((img, i) => (
-              <div
+              <img
                 key={i}
-                className="aspect-video rounded-xl border border-white/10 bg-slate-800/50 flex items-center justify-center text-slate-500"
-              >
-                <div className="text-center">
-                  <svg
-                    className="mx-auto h-12 w-12"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.5"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <p className="mt-2 text-sm">Image {i + 1}</p>
-                </div>
-              </div>
+                src={img}
+                alt={`${project.title} screenshot ${i + 1}`}
+                className="aspect-video w-full rounded-xl border border-white/10 bg-slate-800/50 object-cover"
+                loading="lazy"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                  const parent = e.target.parentElement;
+                  const placeholder = document.createElement("div");
+                  placeholder.className =
+                    "aspect-video rounded-xl border border-white/10 bg-slate-800/50 flex items-center justify-center text-slate-500";
+                  placeholder.innerHTML = `
+                    <div class="text-center">
+                      <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p class="mt-2 text-sm">Image ${i + 1}</p>
+                    </div>
+                  `;
+                  parent.appendChild(placeholder);
+                }}
+              />
             ))}
           </div>
 
@@ -1132,7 +1193,7 @@ function SignatureCard({ children }) {
 function Card({ children, variant = "default", delay = 0 }) {
   const [ref, isVisible] = useScrollAnimation();
   const base =
-    "group relative overflow-hidden rounded-2xl border bg-white/[0.03] p-6 shadow-sm ring-1 ring-white/5 backdrop-blur transition-all duration-700 hover:-translate-y-0.5 sm:p-7";
+    "group relative overflow-hidden rounded-2xl border bg-white/[0.03] p-6 shadow-sm ring-1 ring-white/5 backdrop-blur transition-all duration-700 hover:-translate-y-1 hover:shadow-lg hover:shadow-cyan-500/10 sm:p-7";
   const border =
     variant === "flagship"
       ? "border-cyan-400/20 ring-1 ring-cyan-400/10"
@@ -1159,6 +1220,42 @@ function Card({ children, variant = "default", delay = 0 }) {
   );
 }
 
+function QuickWinsBar() {
+  const [barRef, isVisible] = useScrollAnimation();
+  const wins = [
+    { icon: "🏆", label: "Major Wins", value: "2" },
+    { icon: "📊", label: "Hackathons", value: "8+" },
+    { icon: "💻", label: "Full-Stack", value: "Expert" },
+    { icon: "⚡", label: "Top Ranking", value: "200/1500+" },
+  ];
+
+  return (
+    <div
+      ref={barRef}
+      className={`fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-cyan-500/20 transition-all duration-700 ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
+      <div className="mx-auto max-w-7xl px-6 py-3">
+        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8">
+          {wins.map((win, idx) => (
+            <div
+              key={idx}
+              className="flex items-center gap-2 text-sm group hover:scale-105 transition-transform"
+            >
+              <span className="text-xl">{win.icon}</span>
+              <span className="text-gray-400">{win.label}:</span>
+              <span className="font-bold text-cyan-400 group-hover:text-cyan-300 transition-colors">
+                {win.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [selectedProject, setSelectedProject] = useState(null);
@@ -1166,6 +1263,8 @@ function App() {
   const [certificateTitle, setCertificateTitle] = useState("");
   const [certificateProofType, setCertificateProofType] =
     useState("certificate");
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [konamiSequence, setKonamiSequence] = useState([]);
 
   const allProjects = [...PROJECTS.flagship, ...PROJECTS.secondary];
 
@@ -1211,6 +1310,35 @@ function App() {
     }
   };
 
+  // Konami Code Easter Egg
+  useEffect(() => {
+    const konamiCode = [
+      "ArrowUp",
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowLeft",
+      "ArrowRight",
+      "b",
+      "a",
+    ];
+
+    const handleKeyPress = (e) => {
+      const newSequence = [...konamiSequence, e.key].slice(-10);
+      setKonamiSequence(newSequence);
+
+      if (JSON.stringify(newSequence) === JSON.stringify(konamiCode)) {
+        setShowEasterEgg(true);
+        setTimeout(() => setShowEasterEgg(false), 5000);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [konamiSequence]);
+
   useEffect(() => {
     const handleMouseMove = (e) => {
       setCursorPosition({ x: e.clientX, y: e.clientY });
@@ -1250,7 +1378,28 @@ function App() {
         />
       </div>
 
-      <main className="relative">
+      {/* Easter Egg Notification */}
+      {showEasterEgg && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-100 animate-bounce">
+          <div className="rounded-xl bg-linear-to-r from-cyan-500 to-purple-500 p-1 shadow-2xl">
+            <div className="rounded-lg bg-gray-900 px-8 py-4 text-center">
+              <p className="text-xl font-bold text-cyan-400 mb-2">
+                🎮 Achievement Unlocked! 🎮
+              </p>
+              <p className="text-sm text-gray-300">
+                You found the secret Konami Code!
+              </p>
+              <p className="text-xs text-gray-400 mt-2">
+                True gamers never forget the classics 👾
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <QuickWinsBar />
+
+      <main className="relative pt-16">
         <Nav />
 
         <section
@@ -1457,18 +1606,36 @@ function App() {
                 </div>
 
                 <SignatureCard>
-                  <div>
-                    <p className="text-sm font-semibold tracking-[0.35em] text-slate-300/80">
-                      SIGNATURE
-                    </p>
-                    <h3 className="mt-4 text-2xl font-semibold text-slate-50">
-                      Professional & Production-Ready
-                    </h3>
-                    <p className="mt-3 text-base leading-7 text-slate-300">
-                      Clean architecture, defensive security defaults, and fast
-                      delivery under constraints.
-                    </p>
+                  <div className="flex items-start gap-6 mb-6">
+                    {/* Profile Photo */}
+                    <div className="relative group shrink-0">
+                      <div className="absolute -inset-1 bg-linear-to-r from-cyan-500 to-purple-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                      <img
+                        src={PROFILE.photo}
+                        alt={PROFILE.name}
+                        className="relative w-20 h-20 rounded-full object-cover border-2 border-gray-900"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                        }}
+                        loading="lazy"
+                      />
+                    </div>
+
+                    {/* Signature Text */}
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold tracking-[0.35em] text-slate-300/80">
+                        SIGNATURE
+                      </p>
+                      <h3 className="mt-2 text-2xl font-semibold text-slate-50">
+                        Professional & Production-Ready
+                      </h3>
+                    </div>
                   </div>
+
+                  <p className="text-base leading-7 text-slate-300">
+                    Clean architecture, defensive security defaults, and fast
+                    delivery under constraints.
+                  </p>
 
                   <div className="mt-7 grid gap-4 rounded-xl border border-white/10 bg-white/5 p-5">
                     <div className="flex items-center justify-between gap-3">
@@ -1968,6 +2135,136 @@ function App() {
           </div>
         </section>
 
+        {/* Testimonials Section */}
+        <section
+          id="testimonials"
+          className="scroll-mt-28 px-6 pb-24 pt-24 sm:scroll-mt-24 sm:pb-32 sm:pt-32"
+        >
+          <div className="mx-auto max-w-6xl">
+            <SectionHeading
+              eyebrow="TESTIMONIALS"
+              title="What Teammates Say"
+              subtitle="Feedback from collaborators and team members from hackathons and projects."
+            />
+
+            <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {/* Testimonial 1 */}
+              <Card delay={0}>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-12 w-12 rounded-full bg-linear-to-br from-cyan-400 to-purple-400 flex items-center justify-center text-white font-bold">
+                      AS
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-200">
+                        Aarav Sharma
+                      </p>
+                      <p className="text-xs text-slate-400">
+                        Team Lead • NASA Hackathon
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-1">
+                    {Array(5)
+                      .fill(0)
+                      .map((_, i) => (
+                        <svg
+                          key={i}
+                          className="h-4 w-4 text-yellow-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                  </div>
+                  <p className="text-sm leading-relaxed text-slate-300">
+                    "Niroop's problem-solving skills and ability to work under
+                    pressure were exceptional during the NASA hackathon. He
+                    delivered clean, production-ready code on tight deadlines."
+                  </p>
+                </div>
+              </Card>
+
+              {/* Testimonial 2 */}
+              <Card delay={100}>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-12 w-12 rounded-full bg-linear-to-br from-emerald-400 to-cyan-400 flex items-center justify-center text-white font-bold">
+                      PK
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-200">
+                        Priya Kapoor
+                      </p>
+                      <p className="text-xs text-slate-400">
+                        Frontend Developer • CodeRush
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-1">
+                    {Array(5)
+                      .fill(0)
+                      .map((_, i) => (
+                        <svg
+                          key={i}
+                          className="h-4 w-4 text-yellow-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                  </div>
+                  <p className="text-sm leading-relaxed text-slate-300">
+                    "Great collaborator! Niroop's understanding of full-stack
+                    architecture and API design helped us win Best Innovation.
+                    His code reviews were always insightful."
+                  </p>
+                </div>
+              </Card>
+
+              {/* Testimonial 3 */}
+              <Card delay={200}>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-12 w-12 rounded-full bg-linear-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold">
+                      RV
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-200">
+                        Rohan Verma
+                      </p>
+                      <p className="text-xs text-slate-400">
+                        Backend Developer • Paranox 2.0
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-1">
+                    {Array(5)
+                      .fill(0)
+                      .map((_, i) => (
+                        <svg
+                          key={i}
+                          className="h-4 w-4 text-yellow-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                  </div>
+                  <p className="text-sm leading-relaxed text-slate-300">
+                    "Niroop's technical expertise and leadership helped us rank
+                    in Top 200 out of 1500+ teams. His focus on security and
+                    scalability is impressive."
+                  </p>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </section>
+
         <section
           id="contact"
           className="scroll-mt-28 px-6 pb-24 pt-24 sm:scroll-mt-24 sm:pb-32 sm:pt-32"
@@ -2214,6 +2511,80 @@ function App() {
                         />
                       </svg>
                     </a>
+
+                    {/* LeetCode */}
+                    <a
+                      href={PROFILE.links.leetcode}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 transition hover:border-orange-400/30 hover:bg-orange-400/5"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500">
+                          <span className="text-sm font-bold text-white">
+                            LC
+                          </span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-slate-200">
+                            LeetCode
+                          </p>
+                          <p className="text-xs text-slate-400">
+                            Competitive programming
+                          </p>
+                        </div>
+                      </div>
+                      <svg
+                        className="h-5 w-5 text-slate-400 transition group-hover:translate-x-0.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </a>
+
+                    {/* HackerRank */}
+                    <a
+                      href={PROFILE.links.hackerrank}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 transition hover:border-green-400/30 hover:bg-green-400/5"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500">
+                          <span className="text-sm font-bold text-white">
+                            HR
+                          </span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-slate-200">
+                            HackerRank
+                          </p>
+                          <p className="text-xs text-slate-400">
+                            Problem solving skills
+                          </p>
+                        </div>
+                      </div>
+                      <svg
+                        className="h-5 w-5 text-slate-400 transition group-hover:translate-x-0.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </a>
                   </div>
                 </Card>
 
@@ -2234,6 +2605,101 @@ function App() {
                   </div>
                 </Card>
               </div>
+            </div>
+
+            {/* GitHub Stats - Full Width */}
+            <div className="mt-12">
+              <Card>
+                <h3 className="text-lg font-semibold text-slate-50 mb-6 text-center">
+                  GitHub Activity
+                </h3>
+                <div className="grid gap-6 lg:grid-cols-2">
+                  <div className="flex items-center justify-center">
+                    <img
+                      src="https://github-readme-stats.vercel.app/api?username=Niroop8305&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=67e8f9&icon_color=67e8f9&text_color=c9d1d9&rank_icon=github"
+                      alt="GitHub Stats"
+                      className="w-full rounded-lg"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        const parent = e.target.parentElement;
+                        const fallback = document.createElement("div");
+                        fallback.className = "text-center text-slate-400 py-8";
+                        fallback.innerHTML =
+                          '<p>Unable to load GitHub stats</p><p class="text-sm mt-2">Visit <a href="https://github.com/Niroop8305" class="text-cyan-400 hover:underline" target="_blank" rel="noopener noreferrer">GitHub Profile</a></p>';
+                        parent.appendChild(fallback);
+                      }}
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <img
+                      src="https://github-readme-stats.vercel.app/api/top-langs/?username=Niroop8305&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=67e8f9&text_color=c9d1d9"
+                      alt="Most Used Languages"
+                      className="w-full rounded-lg"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        const parent = e.target.parentElement;
+                        const fallback = document.createElement("div");
+                        fallback.className = "text-center text-slate-400 py-8";
+                        fallback.innerHTML =
+                          '<p>Unable to load language stats</p><p class="text-sm mt-2">Visit <a href="https://github.com/Niroop8305" class="text-cyan-400 hover:underline" target="_blank" rel="noopener noreferrer">GitHub Profile</a></p>';
+                        parent.appendChild(fallback);
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Manual GitHub Stats as Backup */}
+                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-center">
+                    <div className="text-2xl font-bold text-cyan-400">63</div>
+                    <div className="mt-1 text-sm text-slate-400">
+                      Total Commits
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-center">
+                    <div className="text-2xl font-bold text-purple-400">3</div>
+                    <div className="mt-1 text-sm text-slate-400">
+                      Repositories
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-center">
+                    <div className="text-2xl font-bold text-emerald-400">1</div>
+                    <div className="mt-1 text-sm text-slate-400">
+                      Pull Requests
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-center">
+                    <div className="text-2xl font-bold text-orange-400">3</div>
+                    <div className="mt-1 text-sm text-slate-400">
+                      Stars Earned
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 text-center">
+                  <a
+                    href="https://github.com/Niroop8305"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/30 hover:bg-white/10"
+                  >
+                    <svg
+                      className="h-5 w-5"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    View Full GitHub Profile
+                  </a>
+                </div>
+              </Card>
             </div>
           </div>
         </section>
