@@ -414,7 +414,7 @@ const ACHIEVEMENTS = {
         "Won gold medal for building an interactive 3D visualization platform for Near-Earth Objects using React, Node.js, and Three.js.",
       techStack: ["React", "Node.js", "Three.js", "Express", "MongoDB"],
       github: "https://github.com/Niroop8305/NeoVision",
-      demo: "https://neovision-demo.vercel.app",
+      demo: "",
       proof: "/certificates/nasa-medal-photo.jpeg",
       proofType: "photo",
       icon: "🏆",
@@ -432,7 +432,7 @@ const ACHIEVEMENTS = {
         "Received Best Innovation Award for creating a crowdfunding platform connecting tech startups with investors using the MERN stack.",
       techStack: ["React", "Node.js", "MongoDB", "Express", "JWT"],
       github: "https://github.com/Niroop8305/InnovateFund",
-      demo: "https://innovatefund-demo.vercel.app",
+      demo: "",
       proof: "/certificates/coderush-innovation.jpeg",
       proofType: "certificate",
       icon: "💡",
@@ -1221,7 +1221,6 @@ function Card({ children, variant = "default", delay = 0 }) {
 }
 
 function QuickWinsBar() {
-  const [barRef, isVisible] = useScrollAnimation();
   const wins = [
     { icon: "🏆", label: "Major Wins", value: "2" },
     { icon: "📊", label: "Hackathons", value: "8+" },
@@ -1230,12 +1229,7 @@ function QuickWinsBar() {
   ];
 
   return (
-    <div
-      ref={barRef}
-      className={`fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-cyan-500/20 transition-all duration-700 ${
-        isVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
-    >
+    <div className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-cyan-500/20">
       <div className="mx-auto max-w-7xl px-6 py-3">
         <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8">
           {wins.map((win, idx) => (
@@ -2018,7 +2012,7 @@ function App() {
                                 GitHub
                               </a>
                             )}
-                            {award.demo && (
+                            {award.demo && award.demo !== "" && (
                               <a
                                 href={award.demo}
                                 target="_blank"
