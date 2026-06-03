@@ -73,19 +73,7 @@ function useReveal(threshold = 0.1) {
 
 export default function Testimonials() {
   const [headerRef, headerVisible] = useReveal(0.1);
-  const [testimonials, setTestimonials] = useState(HARDCODED_TESTIMONIALS);
-
-  const loadLocalSignatures = () => {
-    const local = JSON.parse(localStorage.getItem("user_signatures") || "[]");
-    setTestimonials([...HARDCODED_TESTIMONIALS, ...local]);
-  };
-
-  useEffect(() => {
-    loadLocalSignatures();
-    // Listen for new signatures from the Guestbook component
-    window.addEventListener("new-signature", loadLocalSignatures);
-    return () => window.removeEventListener("new-signature", loadLocalSignatures);
-  }, []);
+  const testimonials = HARDCODED_TESTIMONIALS;
 
   // Split into two rows for the marquee
   const mid = Math.ceil(testimonials.length / 2);
@@ -201,12 +189,6 @@ function TestimonialCard({ item }) {
         </p>
       </div>
 
-      {item.isLocal && (
-        <div className="mt-6 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-          <span className="text-[9px] font-black text-amber-500/80 uppercase tracking-widest">New Signature</span>
-        </div>
-      )}
     </div>
   );
 }

@@ -6,7 +6,6 @@ import Projects from "./components/Projects";
 import Education from "./components/Education";
 import Achievements from "./components/Achievements";
 import Testimonials from "./components/Testimonials";
-import Guestbook from "./components/Guestbook";
 import Contact from "./components/Contact";
 import CustomCursor from "./components/CustomCursor";
 import { useRef, useState, useEffect } from "react";
@@ -95,10 +94,6 @@ export default function App() {
 
         <section id="testimonials">
           <SectionReveal><Testimonials /></SectionReveal>
-        </section>
-
-        <section id="guestbook">
-          <SectionReveal><Guestbook /></SectionReveal>
         </section>
 
         <section id="contact">
