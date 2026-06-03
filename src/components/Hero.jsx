@@ -126,7 +126,7 @@ function useTypewriter(words, typingSpeed = 80, deletingSpeed = 50, pauseMs = 20
 }
 
 /* ─── Animated counter ─── */
-function AnimatedCounter({ target, suffix = "" }) {
+function AnimatedCounter({ target, suffix = "", delay = 0 }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const started = useRef(false);
@@ -138,22 +138,25 @@ function AnimatedCounter({ target, suffix = "" }) {
       ([entry]) => {
         if (entry.isIntersecting && !started.current) {
           started.current = true;
-          const duration = 1800;
-          const start = performance.now();
-          const tick = (now) => {
-            const progress = Math.min((now - start) / duration, 1);
-            const ease = 1 - Math.pow(1 - progress, 3);
-            setCount(Math.floor(ease * target));
-            if (progress < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
+          // Add a small delay before starting the counting animation
+          setTimeout(() => {
+            const duration = 2000;
+            const start = performance.now();
+            const tick = (now) => {
+              const progress = Math.min((now - start) / duration, 1);
+              const ease = 1 - Math.pow(1 - progress, 3);
+              setCount(Math.floor(ease * target));
+              if (progress < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+          }, delay);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.1 }
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [target]);
+  }, [target, delay]);
 
   return (
     <span ref={ref}>
@@ -213,7 +216,7 @@ export default function Hero() {
 
       {/* ── Main content ── */}
       <motion.div 
-        className="relative z-10 flex flex-col items-center justify-center px-6 py-20 text-center"
+        className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pt-24 pb-12 text-center"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -281,9 +284,9 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* ── Bottom info strip ── */}
+      {/* ── Info strip (Moved back to bottom) ── */}
       <motion.div 
-        className="relative z-10 w-full border-t border-white/5 px-8 py-5 backdrop-blur-sm bg-black/20"
+        className="relative z-10 w-full border-t border-white/5 px-8 py-6 backdrop-blur-sm bg-black/20"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5, duration: 1 }}
@@ -311,7 +314,7 @@ export default function Hero() {
             ].map(({ value, suffix, label }) => (
               <div key={label} className="text-center">
                 <p className="text-base font-black text-white tabular-nums drop-shadow-md">
-                  <AnimatedCounter target={value} suffix={suffix} />
+                  <AnimatedCounter target={value} suffix={suffix} delay={2000} />
                 </p>
                 <p className="text-[10px] uppercase tracking-widest text-slate-500 mt-0.5">
                   {label}

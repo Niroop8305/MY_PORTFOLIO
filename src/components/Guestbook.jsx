@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import emailjs from '@emailjs/browser';
 
 const CONTACT_EMAIL = "nirooppapani.work@gmail.com";
 
@@ -48,20 +47,25 @@ export default function Guestbook() {
       };
       localStorage.setItem("user_signatures", JSON.stringify([...localSignatures, newSignature]));
 
-      // 2. Send Email to Owner (You) via EmailJS
-      await emailjs.send(
-        'service_default', // Service ID
-        'template_default', // Template ID
-        {
-          from_name: formData.name,
-          designation: formData.role,
-          company: formData.company,
-          message: formData.text,
-          avatar_data: formData.avatar ? "Image provided (Base64)" : "No image",
-          to_email: CONTACT_EMAIL,
+      // 2. Send Email to Owner (You) via Web3Forms
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        'YOUR_PUBLIC_KEY' // Public Key
-      );
+        body: JSON.stringify({
+          access_key: "2cdc43c7-378f-4251-b79b-b03587f872bd",
+          name: formData.name,
+          subject: `New Guestbook Signature from ${formData.name}`,
+          message: `Name: ${formData.name}\nRole: ${formData.role || 'N/A'}\nCompany: ${formData.company || 'N/A'}\n\nMessage:\n${formData.text}`,
+        }),
+      });
+
+      const result = await response.json();
+      if (!result.success) {
+        console.error("Web3Forms Error:", result);
+      }
 
       setStatus("sent");
       setTimeout(() => {

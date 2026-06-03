@@ -9,7 +9,8 @@ import Testimonials from "./components/Testimonials";
 import Guestbook from "./components/Guestbook";
 import Contact from "./components/Contact";
 import CustomCursor from "./components/CustomCursor";
-import { motion } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { useScroll, useTransform, useSpring, motion } from "framer-motion";
 
 function SectionReveal({ children }) {
   return (
@@ -28,57 +29,39 @@ function SectionReveal({ children }) {
 
 export default function App() {
 
-  /*
-   * Circle-reveal animation using direct DOM manipulation.
-   * Why not React state? setState batching means null→id never renders separately,
-   * so the animation never re-triggers.
-   *
-   * Why direct px coords? clip-path percentages are relative to the ELEMENT's
-   * bounding box, not the viewport. For a 3000px tall section, 50% 50% is 1500px
-   * down — below the viewport. We compute the viewport center in px instead.
+  /**
+   * Center reveal animation logic
    */
-  const handleNavClick = (id) => {
-    const section = document.getElementById(id);
-    if (!section) return;
-
-    // 1. Jump to section instantly
-    section.scrollIntoView({ behavior: "auto" });
-
-    // 2. Get the reveal wrapper (fallback to section itself)
-    const wrapper = section.querySelector("[data-reveal]") || section;
-
-    // 3. Viewport center (origin of the expanding circle)
+  const triggerReveal = (target) => {
+    if (!target) return;
+    const wrapper = target.querySelector("[data-reveal]") || target;
     const cx = Math.round(window.innerWidth / 2);
     const cy = Math.round(window.innerHeight / 2);
+    const maxR = Math.ceil(Math.sqrt(Math.pow(Math.max(cx, window.innerWidth - cx), 2) + Math.pow(Math.max(cy, window.innerHeight - cy), 2))) + 60;
 
-    // 4. Compute max radius to fully cover the screen from the center point
-    //    Must use px→px so CSS can interpolate (px and % don't interpolate)
-    const maxR = Math.ceil(
-      Math.sqrt(
-        Math.pow(Math.max(cx, window.innerWidth  - cx), 2) +
-        Math.pow(Math.max(cy, window.innerHeight - cy), 2)
-      )
-    ) + 60;
-
-    // 5. Snap to 0px clip, no transition
     wrapper.style.transition = "none";
     wrapper.style.clipPath = `circle(0px at ${cx}px ${cy}px)`;
-
-    // 6. Force the browser to paint the clipped state before the transition starts
-    //    (offsetHeight read triggers a synchronous reflow)
     void wrapper.offsetHeight;
-
-    // 7. Apply transition and animate to full radius
     wrapper.style.transition = "clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1)";
     wrapper.style.clipPath = `circle(${maxR}px at ${cx}px ${cy}px)`;
 
-    // 8. Clean up after animation completes
     setTimeout(() => {
       wrapper.style.transition = "";
       wrapper.style.clipPath = "";
     }, 1300);
   };
 
+  /**
+   * Updated handleNavClick to use vertical scrolling and the center-reveal animation
+   */
+  const handleNavClick = (id) => {
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    // Scroll instantly then reveal
+    window.scrollTo({ top: section.offsetTop, behavior: "auto" });
+    triggerReveal(section);
+  };
 
   return (
     <div className="bg-zinc-950 text-slate-100 min-h-screen">

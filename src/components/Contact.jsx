@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import emailjs from '@emailjs/browser';
 
 const CONTACT_INFO = {
   email: "nirooppapani.work@gmail.com",
@@ -78,29 +77,38 @@ function ContactForm({ visible }) {
     setStatus("sending");
 
     try {
-      // NOTE: You need to set up your own EmailJS service, template, and public key
-      // Go to https://www.emailjs.com/ to create a free account
-      await emailjs.send(
-        'service_default', // Replace with your Service ID
-        'template_default', // Replace with your Template ID
-        {
-          from_name: form.name,
-          from_email: form.email,
-          message: form.message,
-          to_email: CONTACT_INFO.email,
+      // IMPORTANT: Get your free access key from https://web3forms.com/ 
+      // by entering your email (nirooppapani.work@gmail.com).
+      // Then replace "YOUR_WEB3FORMS_ACCESS_KEY_HERE" with the key you receive.
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        'YOUR_PUBLIC_KEY' // Replace with your Public Key
-      );
+        body: JSON.stringify({
+          access_key: "2cdc43c7-378f-4251-b79b-b03587f872bd", 
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          subject: `New Portfolio Contact Message from ${form.name}`,
+        }),
+      });
 
-      setStatus("sent");
-      setForm({ name: "", email: "", message: "" });
-      setTimeout(() => setStatus("idle"), 5000);
+      const result = await response.json();
+      if (result.success) {
+        setStatus("sent");
+        setForm({ name: "", email: "", message: "" });
+        setTimeout(() => setStatus("idle"), 5000);
+      } else {
+        console.error("Web3Forms Error:", result);
+        setStatus("idle");
+        alert("Action required: Please add your Web3Forms access key in Contact.jsx to enable direct messaging.");
+      }
     } catch (error) {
-      console.error("EmailJS Error:", error);
-      // Fallback to direct Gmail compose if EmailJS fails or isn't configured
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${CONTACT_INFO.email}&su=Contact from ${encodeURIComponent(form.name)}&body=${encodeURIComponent(form.message)}`;
-      window.open(gmailUrl, '_blank');
-      setStatus("sent");
+      console.error("Error sending message:", error);
+      setStatus("idle");
+      alert("Failed to send message. Please check your connection.");
     }
   };
 

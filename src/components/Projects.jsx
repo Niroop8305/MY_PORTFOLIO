@@ -24,26 +24,6 @@ const PROJECTS = [
     image: "/images/InnovateFund.png"
   },
   {
-    id: "neovision",
-    title: "NeoVision",
-    tagline: "NASA Space Apps Hackathon — Gold Medal",
-    description: "🚀 NeoVision is an immersive 3D experience that transforms raw celestial data into an intuitive, explorable universe. Built for the NASA Space Apps Challenge, it bridges the gap between complex astronomical datasets and public engagement.",
-    bullets: [
-      "Real-time tracking of 30,000+ Near-Earth Objects using NASA APIs",
-      "Interactive 3D orbital visualization powered by Three.js",
-      "Educational modules detailing asteroid composition and risk levels"
-    ],
-    stack: [
-      { name: "React", icon: "react" },
-      { name: "Three.js", icon: "threejs" },
-      { name: "Node.js", icon: "nodejs" },
-      { name: "Tailwind", icon: "tailwindcss" }
-    ],
-    links: { github: "https://github.com/Nikhil-Madaravena/NeoVision", live: "https://neo-vision-hr.vercel.app/" },
-    accent: "#10b981", // emerald
-    image: "/images/NeoVision.png"
-  },
-  {
     id: "hr-management",
     title: "WorkZen HRMS",
     tagline: "Enterprise-Grade Human Resource Workflows",
@@ -62,6 +42,26 @@ const PROJECTS = [
     links: { github: "https://github.com/Niroop8305/Odoo-x-Amalthea-2025-Hackathon", live: "https://github.com/Niroop8305/Odoo-x-Amalthea-2025-Hackathon" },
     accent: "#3b82f6", // blue
     image: "/images/WorkZen.png"
+  },
+  {
+    id: "neovision",
+    title: "NeoVision",
+    tagline: "NASA Space Apps Hackathon — Gold Medal",
+    description: "🚀 NeoVision is an immersive 3D experience that transforms raw celestial data into an intuitive, explorable universe. Built for the NASA Space Apps Challenge, it bridges the gap between complex astronomical datasets and public engagement.",
+    bullets: [
+      "Real-time tracking of 30,000+ Near-Earth Objects using NASA APIs",
+      "Interactive 3D orbital visualization powered by Three.js",
+      "Educational modules detailing asteroid composition and risk levels"
+    ],
+    stack: [
+      { name: "React", icon: "react" },
+      { name: "Three.js", icon: "threejs" },
+      { name: "Node.js", icon: "nodejs" },
+      { name: "Tailwind", icon: "tailwindcss" }
+    ],
+    links: { github: "https://github.com/Niroop8305/NeoVision", live: "https://neo-vision-hr.vercel.app/" },
+    accent: "#10b981", // emerald
+    image: "/images/NeoVision.png"
   },
   {
     id: "sparkathon",
@@ -86,6 +86,50 @@ const PROJECTS = [
   }
 ];
 
+const EXTRA_PROJECTS = [
+  {
+    id: "expense-management",
+    title: "Expense Management",
+    tagline: "Enterprise Expense Management System",
+    description: "💰 A highly scalable, multi-tenant Expense Management System designed for enterprises. Features robust role-based access control, customizable multi-step approval workflows, and an elegant dark/light mode UI.",
+    bullets: [
+      "Multi-Tenant Architecture for separate company data isolation",
+      "Custom approval workflows and Role-Based Access Control",
+      "Analytics & Dashboards detailing expense trends and breakdowns"
+    ],
+    stack: [
+      { name: "React", icon: "react" },
+      { name: "Node.js", icon: "nodejs" },
+      { name: "MongoDB", icon: "mongodb" },
+      { name: "Tailwind", icon: "tailwindcss" }
+    ],
+    links: { github: "https://github.com/Niroop8305/Expense-Management" },
+    accent: "#ec4899", // pink
+    image: "/images/ExpenseManagement.png"
+  },
+  {
+    id: "leave-management",
+    title: "Leave Management",
+    tagline: "AI-Powered Employee Leave System",
+    description: "🌴 A comprehensive, AI-powered full-stack application to streamline employee leave workflows. Provides an end-to-end solution for HR teams, managers, and employees with secure role-based access control.",
+    bullets: [
+      "Role-Based Access Control with distinct dashboards for Admins, Managers, and Employees",
+      "AI-Powered Predictions using Python/Flask to identify high-risk leave patterns",
+      "Advanced Analytics & Reporting with automated SMTP email notifications"
+    ],
+    stack: [
+      { name: "React", icon: "react" },
+      { name: "Spring Boot", icon: "spring" },
+      { name: "MySQL", icon: "mysql" },
+      { name: "Python", icon: "python" },
+      { name: "Docker", icon: "docker" }
+    ],
+    links: { github: "https://github.com/Niroop8305/Employee_Leave_Management_System" },
+    accent: "#06b6d4", // cyan
+    image: "/images/LeaveManagement.png"
+  }
+];
+
 /* Devicon Helper */
 function getIconUrl(slug) {
   const map = {
@@ -93,6 +137,7 @@ function getIconUrl(slug) {
     vercel: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg",
     framer: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/framermotion/framermotion-original.svg",
     express: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg",
+    spring: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg",
   };
   return map[slug] || `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${slug}/${slug}-original.svg`;
 }
@@ -125,6 +170,9 @@ function SpotlightCard({ children, accent }) {
 }
 
 export default function Projects() {
+  const [showMore, setShowMore] = useState(false);
+  const displayedProjects = showMore ? [...PROJECTS, ...EXTRA_PROJECTS] : PROJECTS;
+
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
@@ -135,11 +183,11 @@ export default function Projects() {
   
   useEffect(() => {
     return scrollYProgress.on("change", (latest) => {
-      setActiveProject(Math.round(latest * (PROJECTS.length - 1)));
+      setActiveProject(Math.round(latest * (displayedProjects.length - 1)));
     });
-  }, [scrollYProgress]);
+  }, [scrollYProgress, displayedProjects.length]);
 
-  const current = PROJECTS[activeProject];
+  const current = displayedProjects[activeProject] || displayedProjects[0];
 
   // Variants for staggered reveals
   const contentVariants = {
@@ -229,7 +277,7 @@ export default function Projects() {
 
         {/* Scroll Right: Images */}
         <div className="lg:w-[45%] space-y-32 pb-[20vh] lg:pl-16">
-          {PROJECTS.map((proj, idx) => (
+          {displayedProjects.map((proj, idx) => (
             <div key={proj.id} className="min-h-[60vh] lg:h-[calc(100vh-8rem)] flex items-center">
               <motion.div 
                 className="w-full"
@@ -273,6 +321,18 @@ export default function Projects() {
               </motion.div>
             </div>
           ))}
+
+          {/* View More Button */}
+          {!showMore && (
+            <div className="flex justify-center pb-20">
+              <button 
+                onClick={() => setShowMore(true)}
+                className="px-8 py-4 rounded-full border border-white/10 bg-white/5 hover:bg-white hover:text-black transition-all duration-300 text-[11px] font-black uppercase tracking-widest text-white shadow-lg backdrop-blur-md"
+              >
+                View More Projects
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </section>
