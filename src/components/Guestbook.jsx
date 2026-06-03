@@ -19,14 +19,14 @@ function useReveal(threshold = 0.1) {
 export default function Guestbook() {
   const [ref, visible] = useReveal(0.1);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: "", role: "", company: "", text: "", avatar: "" });
+  const [formData, setFormData] = useState({ name: "", role: "", company: "", text: "", avatar: "", avatarFile: null });
   const [status, setStatus] = useState("idle"); // idle | sending | sent
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => setFormData(prev => ({ ...prev, avatar: reader.result }));
+      reader.onloadend = () => setFormData(prev => ({ ...prev, avatar: reader.result, avatarFile: file }));
       reader.readAsDataURL(file);
     }
   };
@@ -48,18 +48,19 @@ export default function Guestbook() {
       localStorage.setItem("user_signatures", JSON.stringify([...localSignatures, newSignature]));
 
       // 2. Send Email to Owner (You) via Web3Forms
+      const formDataToSend = new FormData();
+      formDataToSend.append("access_key", "2cdc43c7-378f-4251-b79b-b03587f872bd");
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("subject", `New Guestbook Signature from ${formData.name}`);
+      formDataToSend.append("message", `Name: ${formData.name}\nRole: ${formData.role || 'N/A'}\nCompany: ${formData.company || 'N/A'}\n\nMessage:\n${formData.text}`);
+      
+      if (formData.avatarFile) {
+        formDataToSend.append("attachment", formData.avatarFile);
+      }
+
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          access_key: "2cdc43c7-378f-4251-b79b-b03587f872bd",
-          name: formData.name,
-          subject: `New Guestbook Signature from ${formData.name}`,
-          message: `Name: ${formData.name}\nRole: ${formData.role || 'N/A'}\nCompany: ${formData.company || 'N/A'}\n\nMessage:\n${formData.text}`,
-        }),
+        body: formDataToSend,
       });
 
       const result = await response.json();
@@ -71,7 +72,7 @@ export default function Guestbook() {
       setTimeout(() => {
         setIsFormOpen(false);
         setStatus("idle");
-        setFormData({ name: "", role: "", company: "", text: "", avatar: "" });
+        setFormData({ name: "", role: "", company: "", text: "", avatar: "", avatarFile: null });
         // Trigger a custom event to refresh Testimonials
         window.dispatchEvent(new Event("new-signature"));
       }, 2000);
