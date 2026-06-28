@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from "react";
 const HARDCODED_TESTIMONIALS = [
   {
     id: 1,
-    name: "SARAH CHEN",
-    role: "SENIOR DEVELOPER",
-    company: "TECHCORP",
-    text: "NIROOP'S ATTENTION TO DETAIL AND FOCUS ON CREATING SMOOTH INTERFACES HELPED REFINE OUR WORK SIGNIFICANTLY. HIS FULL-STACK SKILLS STAND OUT CLEARLY.",
-    avatar: "https://i.pravatar.cc/150?u=1",
-    companyIcon: "🚀", 
+    name: "Zainab Amreen",
+    role: "Student",
+    company: "KITSW",
+    text: "NIROOP COMBINESTECHNICAL PROFICIENCY WITH COMPLETE DEDICATION TO HIS WORK. HE GIVESNIROOP COMBINES TECHNICAL PROFICIENCY WITH COMPLETE DEDICATION TO HIS WORK. HE GIVES EVERY PROJECT HIS 100% AND HAS EXCELLENT EXPERTISE IN THE MERN STACK.",
+    avatar: "/signatures/zainab.jpeg",
+    companyIcon: "🎓", 
   },
   {
     id: 2,

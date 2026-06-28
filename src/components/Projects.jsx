@@ -39,7 +39,7 @@ const PROJECTS = [
       { name: "MySQL", icon: "mysql" },
       { name: "Docker", icon: "docker" }
     ],
-    links: { github: "https://github.com/Niroop8305/Odoo-x-Amalthea-2025-Hackathon", live: "https://github.com/Niroop8305/Odoo-x-Amalthea-2025-Hackathon" },
+    links: { github: "https://github.com/Niroop8305/Odoo-x-Amalthea-2025-Hackathon", live: "https://odoo-hrms.vercel.app/" },
     accent: "#3b82f6", // blue
     image: "/images/WorkZen.png"
   },
